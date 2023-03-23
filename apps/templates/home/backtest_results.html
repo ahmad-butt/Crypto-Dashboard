@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script>
+      vegaEmbed("#chart", {{ chart_data|safe }}
+    </script>
+  </body>
+</html>

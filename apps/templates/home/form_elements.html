@@ -1,0 +1,87 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Forms {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+                <div class="page-header">
+                    <div class="page-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="page-header-title">
+                                    <h5 class="m-b-10">Form Elements</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Select 3 Crypto Currencies of your choice</h5>
+                                    </div>
+                                    <form method='post' action='change_preference'>
+                                        {% csrf_token %}
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>First Currency</label>
+                                                <select class="form-control" id="preference" name="preference">
+                                                    {% for symbol in symbols %}
+                                                    <option name='first_curr' value={{symbol}}>{{symbol}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Second Currency</label>
+                                                <select class="form-control" id="preference" name="preference">
+                                                    {% for symbol in symbols %}
+                                                    <option name='second_curr' value={{symbol}}>{{symbol}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Third Currency</label>
+                                                <select class="form-control" id="preference" name="preference">
+                                                    {% for symbol in symbols %}
+                                                    <option name='third_curr' value={{symbol}}>{{symbol}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-secondary">Save</button>
+                                                </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}
