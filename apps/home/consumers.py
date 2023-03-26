@@ -10,14 +10,19 @@ class CryptoPriceConsumer(AsyncWebsocketConsumer):
 
     data = []
 
-    def get_data(self):
-        return CurrencyPreference.objects.all().values()
+    def get_data(self, id):
+        return CurrencyPreference.objects.get(pk=id)
 
     async def connect(self):
         await self.accept()
-        self.data = await database_sync_to_async(list)(CurrencyPreference.objects.all())
-        print(self.data)
-        from_symbols = ['BTC', 'ETH', 'SOL']
+        self.data = await database_sync_to_async(self.get_data)(self.scope["user"].id)
+
+        from_symbols = []
+
+        from_symbols.append(self.data.first_curr)
+        from_symbols.append(self.data.second_curr)
+        from_symbols.append(self.data.third_curr)
+
         to_symbol = 'USD'
         api_key = '08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a'
         # print(message)

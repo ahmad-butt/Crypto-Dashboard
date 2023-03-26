@@ -13,17 +13,36 @@ import requests
 from .models import CurrencyPreference
 from django.views.decorators.csrf import csrf_protect
 import strategies
-import pandas as pd
-import numpy as np
+import requests
+
+
+def get_crypto_news():
+    topic = "binance"
+    url = ('https://newsapi.org/v2/everything?q=' + topic +
+           '&language=en&apiKey=16e08c594ea94f37ae03f0f7d0319dc7')
+    response = requests.get(url)
+    return response.json()
 
 
 @login_required(login_url="/login/")
 def index(request):
-    context = {'segment': 'index'}
     if not CurrencyPreference.objects.filter(user_id=request.user.id).exists():
         pref = CurrencyPreference(
             user_id=request.user.id, first_curr='BTC', second_curr='ETH', third_curr='SOL')
         pref.save()
+
+    user_pref = CurrencyPreference.objects.get(pk=request.user.id)
+
+    news_res = get_crypto_news()
+    print(news_res["articles"][0])
+
+    context = {
+        'segment': 'index',
+        'first_curr': user_pref.first_curr,
+        'second_curr': user_pref.second_curr,
+        'third_curr': user_pref.third_curr,
+        'news': news_res["articles"]
+    }
 
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
@@ -47,18 +66,43 @@ def change_preference(request):
 
 @csrf_protect
 def run_backtest(request):
-    result = strategies.run_backtest()
+    pf = strategies.run_backtest()
+
+    data = {
+        "Start": pf.stats()["Start"],
+        "End": pf.stats()["End"],
+        "Period": pf.stats()["Period"],
+        "Start Value": pf.stats()["Start Value"],
+        "End Value": pf.stats()["End Value"],
+        "Total Trades": pf.stats()["Total Trades"],
+        "Win Rate": pf.stats()["Win Rate [%]"],
+        "Best Trade": pf.stats()["Best Trade [%]"],
+        "Worst Trade": pf.stats()["Worst Trade [%]"],
+        "Avg Win Trade": pf.stats()["Avg Winning Trade [%]"],
+        "Avg Losing Trade": pf.stats()["Avg Losing Trade [%]"],
+        "Total Profit": pf.total_profit(),
+        "Total Return": pf.stats()["Total Return [%]"],
+        "Total Fees Paid": pf.stats()["Total Fees Paid"],
+        "Max Drawdown": pf.stats()["Max Drawdown [%]"],
+    }
+
     context = {
-        'result': result,
-        'return': result.total_return()*100,
-        'chart_data': result.plot().to_html()
+        'chart_data': pf.plot().to_html(),
+        'data': data,
     }
     return render(request, 'home/backtest_results.html', context)
 
 
 @login_required(login_url="/login/")
 def pages(request):
-    context = {}
+    user_pref = CurrencyPreference.objects.get(pk=request.user.id)
+
+    context = {
+        'segment': 'index',
+        'first_curr': user_pref.first_curr,
+        'second_curr': user_pref.second_curr,
+        'third_curr': user_pref.third_curr
+    }
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
