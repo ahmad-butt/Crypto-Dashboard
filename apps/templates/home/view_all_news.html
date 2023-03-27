@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <!--[ Recent Users ] start-->
+        <div style="margin-top: 20px;" class="col-xl-8 col-md-6">
+            <div style="width: 74vw;" class="card Recent-Users">
+                <div class="card-header">
+                    <h5>Crypto News</h5>
+                </div>
+                <div class="card-block px-0 py-3">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tbody>
+                                {% for n in all_news %}
+                                <tr class="unread">
+                                    <td><img class="rounded-circle" style="width:40px;"
+                                            src="{{ ASSETS_ROOT }}/images/user/avatar-1.jpg"
+                                            alt="activity-user">
+                                    </td>
+                                    <td style="white-space: unset;">
+                                        <h6 class="mb-1">{{n.author}}</h6>
+                                        <p id="temp" class="m-0">{{n.title}}</p>
+                                    </td>
+                                    <td>
+                                        <h6 class="text-muted"><i
+                                                class="fas fa-circle text-c-green f-10 m-r-15"></i>{{n.source.name}}</h6>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href={{n.url}}
+                                            class="label theme-bg text-white f-12"
+                                            target="_blank"
+                                            >
+                                            Read
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--[ Recent Users ] end-->
+    </div>
+</section>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}

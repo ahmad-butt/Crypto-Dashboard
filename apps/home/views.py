@@ -24,6 +24,15 @@ def get_crypto_news():
     return response.json()
 
 
+def view_all_news(request):
+    all_news = get_crypto_news()
+    print("hello")
+    context = {
+        "all_news": all_news["articles"],
+    }
+    return HttpResponseRedirect('home/view_all_news.html', context)
+
+
 @login_required(login_url="/login/")
 def index(request):
     if not CurrencyPreference.objects.filter(user_id=request.user.id).exists():
@@ -34,14 +43,13 @@ def index(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
 
     news_res = get_crypto_news()
-    print(news_res["articles"][0])
 
     context = {
         'segment': 'index',
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["articles"]
+        'news': news_res["articles"][0:5]
     }
 
     html_template = loader.get_template('home/index.html')
@@ -96,13 +104,17 @@ def run_backtest(request):
 @login_required(login_url="/login/")
 def pages(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
+    news_res = get_crypto_news()
 
     context = {
         'segment': 'index',
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
-        'third_curr': user_pref.third_curr
+        'third_curr': user_pref.third_curr,
+        'news': news_res["articles"][0:5],
+        'all_news': news_res["articles"],
     }
+
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
