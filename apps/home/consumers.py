@@ -25,7 +25,7 @@ class CryptoPriceConsumer(AsyncWebsocketConsumer):
 
         to_symbol = 'USD'
         api_key = '08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a'
-        # print(message)
+
         while True:
             url = f'https://min-api.cryptocompare.com/data/pricemulti?fsyms={from_symbols[0]},{from_symbols[1]},{from_symbols[2]}&tsyms={to_symbol}&api_key={api_key}'
             prices = requests.get(url)

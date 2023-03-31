@@ -14,22 +14,22 @@ from .models import CurrencyPreference
 from django.views.decorators.csrf import csrf_protect
 import strategies
 import requests
+from datetime import datetime
 
 
 def get_crypto_news():
-    topic = "binance"
-    url = ('https://newsapi.org/v2/everything?q=' + topic +
-           '&language=en&apiKey=16e08c594ea94f37ae03f0f7d0319dc7')
+    url = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN&api_key=08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a"
     response = requests.get(url)
     return response.json()
 
 
 def view_all_news(request):
     all_news = get_crypto_news()
-    print("hello")
+
     context = {
-        "all_news": all_news["articles"],
+        "all_news": all_news,
     }
+
     return HttpResponseRedirect('home/view_all_news.html', context)
 
 
@@ -49,7 +49,7 @@ def index(request):
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["articles"][0:5]
+        'news': news_res["Data"][0:5],
     }
 
     html_template = loader.get_template('home/index.html')
@@ -58,7 +58,6 @@ def index(request):
 
 @csrf_protect
 def change_preference(request):
-    print(request.user.id)
     data = request.POST.getlist('preference')
     c = CurrencyPreference()
     c.user_id = request.user.id
@@ -111,8 +110,8 @@ def pages(request):
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["articles"][0:5],
-        'all_news': news_res["articles"],
+        'news': news_res["Data"][0:5],
+        'all_news': news_res["Data"],
     }
 
     # All resource paths end in .html.
@@ -129,6 +128,10 @@ def pages(request):
             for k in currencies.json()['Data']:
                 symbols.append(k)
             context['symbols'] = symbols
+        elif load_template == 'coint_pairs.html':
+            context = {
+                "range": range(20),
+            }
 
         context['segment'] = load_template
         html_template = loader.get_template('home/' + load_template)

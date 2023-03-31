@@ -105,16 +105,17 @@
                                                     {% for n in news %}
                                                     <tr class="unread">
                                                         <td><img class="rounded-circle" style="width:40px;"
-                                                                src="{{ ASSETS_ROOT }}/images/user/avatar-1.jpg"
+                                                                src={{n.imageurl}}
                                                                 alt="activity-user">
                                                         </td>
                                                         <td style="white-space: unset;">
-                                                            <h6 class="mb-1">{{n.author}}</h6>
+                                                            <h6 class="mb-1">{{n.source_info.name}}</h6>
+                                                            <p style="font-size: 10px; margin-bottom: 10px" class="mb-1">{{n.categories}}</p>
                                                             <p class="m-0">{{n.title}}</p>
                                                         </td>
                                                         <td>
                                                             <h6 class="text-muted"><i
-                                                                    class="fas fa-circle text-c-green f-10 m-r-15"></i>{{n.source.name}}</h6>
+                                                                class="fas fa-circle text-c-green f-10 m-r-15"></i>{{n.source}}</h6>
                                                         </td>
                                                         <td>
                                                             <a
