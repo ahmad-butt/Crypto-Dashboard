@@ -3,7 +3,46 @@
 {% block title %} UI Tables {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <style>
+        h3{
+            color: #9E9E9E;
+            font-size: calc(20px + 6 * ((100vw - 320px) / 680));
+        }
+
+        .card{
+            border-radius:0;
+            width: calc(600px + 10 * ((100vw - 320px) / 680)) ;
+            border-top-color: #F9E8C7 !important;
+            padding-left: 0 !;
+        }
+
+        img{
+            width: 180px ;
+        }
+
+        small{
+            letter-spacing: 2px;
+        }
+
+        .touch{
+            color:#04A79C;
+            cursor: pointer;
+        }
+
+        .plan{
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-size:calc(8px + 3 * ((100vw - 320px) / 680));
+        }
+
+        @media (max-width: 726px) {
+            .card{
+                width: unset;
+            } 
+        }
+    </style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -20,7 +59,7 @@
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <tbody>
-                                {% for n in all_news %}
+                                {% for n in all_news.Data %}
                                 <tr class="unread">
                                     <td><img class="rounded-circle" style="width:40px;"
                                             src={{n.imageurl}}
@@ -31,9 +70,21 @@
                                         <p style="font-size: 10px; margin-bottom: 10px" class="mb-1">{{n.categories}}</p>
                                         <p class="m-0">{{n.title}}</p>
                                     </td>
+                                    
                                     <td>
-                                        <h6 class="text-muted"><i
-                                                class="fas fa-circle text-c-green f-10 m-r-15"></i>{{n.source}}</h6>
+                                        <h6 class="text-muted">
+                                            <i
+                                                {% if n.sentiment == "Positive" %}
+                                                    class="fas fa-circle text-c-green f-10 m-r-15"
+                                                {% elif n.sentiment == "Negative" %}
+                                                    class="fas fa-circle text-c-red f-10 m-r-15"
+                                                {% else %}
+                                                    class="fas fa-circle text-c-grey f-10 m-r-15"
+                                                {% endif %}
+                                            >
+                                            </i>
+                                            {{n.sentiment}}
+                                        </h6>
                                     </td>
                                     <td>
                                         <a
@@ -43,6 +94,30 @@
                                             >
                                             Read
                                         </a>
+                                    </td>
+                                    <td class="myModal" style="white-space: unset;">
+                                        <div class="container d-flex justify-content-center">
+                                            <a style="margin-top: 5px; cursor:pointer; margin-left:-30px;" class="label theme-bg text-white f-12" data-toggle="modal" data-target="#my-modal{{n.id}}">Summary</a>
+                                            <div id="my-modal{{n.id}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog  modal-dialog-centered justify-content-center " role="document">
+                                                    <div class="modal-content  border-0 mx-3">   
+                                                        <div class="modal-body  p-0">
+                                                            <div style="margin-bottom: 0px" class="card text-center">
+                                                                <div class="card-header pb-0 bg-white border-0"><div class="row"><div class="col ml-auto"><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div> </div><img src={{n.imageurl}} class="img-fluid mt-5" />
+                                                                <h3>
+                                                                    {{n.title}}
+                                                                </h3></div>
+                                                                <div class="card-body px-sm-5 mb-5">
+                                                                    <p class="text-muted mb-0">
+                                                                        {{n.body}}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}

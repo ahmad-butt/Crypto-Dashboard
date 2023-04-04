@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 import strategies
 import requests
 from datetime import datetime
+from nlp import SentimentAnalysis
 
 
 def get_crypto_news():
@@ -23,14 +24,15 @@ def get_crypto_news():
     return response.json()
 
 
-def view_all_news(request):
-    all_news = get_crypto_news()
+# def view_all_news(request):
+#     all_news = get_crypto_news()
 
-    context = {
-        "all_news": all_news,
-    }
+#     context = {
+#         "all_news": all_news,
+#         'range': range(0, len(all_news["Data"]))
+#     }
 
-    return HttpResponseRedirect('home/view_all_news.html', context)
+#     return HttpResponseRedirect('home/view_all_news.html', context)
 
 
 @login_required(login_url="/login/")
@@ -44,12 +46,24 @@ def index(request):
 
     news_res = get_crypto_news()
 
+    sa = SentimentAnalysis(news_res)
+
+    sentiments = sa.run_sentiment_analysis()
+
+    i = 0
+
+    for d in news_res["Data"]:
+        d["sentiment"] = sentiments[i]
+        i += 1
+        if i == 5:
+            break
+
     context = {
         'segment': 'index',
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["Data"][0:5],
+        'news': news_res["Data"][0:5]
     }
 
     html_template = loader.get_template('home/index.html')
@@ -111,7 +125,6 @@ def pages(request):
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
         'news': news_res["Data"][0:5],
-        'all_news': news_res["Data"],
     }
 
     # All resource paths end in .html.
@@ -131,6 +144,21 @@ def pages(request):
         elif load_template == 'coint_pairs.html':
             context = {
                 "range": range(20),
+            }
+        elif load_template == 'view_all_news.html':
+            sa = SentimentAnalysis(news_res)
+
+            sentiments = sa.run_sentiment_analysis()
+
+            i = 0
+
+            for d in news_res["Data"]:
+                d["sentiment"] = sentiments[i]
+                i += 1
+
+            context = {
+                'all_news': news_res,
+                'range': range(0, len(news_res["Data"]))
             }
 
         context['segment'] = load_template
