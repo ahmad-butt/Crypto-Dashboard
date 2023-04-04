@@ -2,7 +2,7 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django import template
 from django.contrib.auth.decorators import login_required
@@ -13,6 +13,12 @@ import requests
 from .models import CurrencyPreference
 from django.views.decorators.csrf import csrf_protect
 import strategies
+
+import utils
+import pandas as pd
+import numpy as np
+from utils import Rule
+
 import requests
 from datetime import datetime
 from nlp import SentimentAnalysis
@@ -33,6 +39,7 @@ def get_crypto_news():
 #     }
 
 #     return HttpResponseRedirect('home/view_all_news.html', context)
+
 
 
 @login_required(login_url="/login/")
@@ -114,6 +121,90 @@ def run_backtest(request):
     return render(request, 'home/backtest_results.html', context)
 
 
+@csrf_protect
+def run_backtrader(request):
+    pass
+
+
+@csrf_protect
+def run_data_builder(request):
+
+    if(request.POST):
+        data = request.POST.dict()
+        symbol = data.get("symbol")
+        interval = data.get("interval")
+        start_date = data.get("start_date")
+        end_date = data.get("end_date")
+        print(symbol, interval, start_date, end_date)
+
+    result = utils.get_crypto_data(symbol, interval, start_date, end_date)
+    print(type(result))
+    context = {
+        'result': result,
+    }
+    return render(request, 'home/data_builder.html', context)
+
+
+@csrf_protect
+def run_technical_indicators(request):
+
+    if request.method == 'POST' and request.FILES['upload']:
+        upload = request.FILES['upload']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+
+        data = request.POST.dict()
+        first = data.get("first")
+        second = data.get("second")
+        third = data.get("third")
+        fourth = data.get("fourth")
+        fifth = data.get("fifth")
+        print(first, second, third, fourth, fifth)
+        indicators = [first, second, third, fourth, fifth]
+        result = utils.calculate_technical_indicators(indicators, file_url)
+        print(type(result))
+        context = {
+            'indicator_result': result,
+        }
+        return render(request, 'home/technical_indicator.html', context)
+
+
+@csrf_protect
+def get_form_features(request):
+    if request.method == 'POST' and request.FILES['file-upload']:
+        upload = request.FILES['file-upload']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+    result = utils.filter_features(file_url)
+    print(type(result))
+    context = {
+        'filtered_features': result,
+    }
+    return render(request, 'home/backtrader.html', context)
+
+
+@csrf_protect
+def run_backtrader(request):
+    if(request.POST):
+        data = request.POST.dict()
+        ticker1 = data.get("compare_from_feature")
+        constant1 = data.get("first_multiplier")
+        ticker2 = data.get("compare_to_feature")
+        constant2 = data.get("second_multiplier")
+        lag = data.get("lookback_period")
+        relation = data.get("relation")
+        kind = data.get("action")
+
+    rule = Rule(ticker1, ticker2, constant1,
+                constant2, lag, relation, kind)
+    context = {
+        'rule': rule,
+    }
+    return render(request, 'home/backtrader.html', context)
+
+
 @login_required(login_url="/login/")
 def pages(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
@@ -134,7 +225,7 @@ def pages(request):
         load_template = request.path.split('/')[-1]
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
-        elif load_template == 'form_elements.html' or load_template == 'backtest.html':
+        elif load_template == 'form_elements.html' or load_template == 'backtest.html' or load_template == 'data_builder.html':
             url = f'https://min-api.cryptocompare.com/data/blockchain/list?api_key=08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a'
             currencies = requests.get(url)
             symbols = []
