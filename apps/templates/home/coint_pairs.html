@@ -1,0 +1,119 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    .tble_attr {
+        display: flex;
+        flex-direction: column;
+        width: 100px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .tble_attr span {
+        font-size: x-small;
+        text-align: center;
+    }
+
+    .tble_attr h5 {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .tbl_row {
+        display: flex;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <!-- [ breadcrumb ] start -->
+
+                <!-- [ breadcrumb ] end -->
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+                            <!-- [ stiped-table ] start -->
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Cointegrated Pairs</h5>
+                                    </div>
+                                    <div class="card-block table-border-style">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    {% for i in range %}
+                                                    <tr class="tbl_row">
+                                                        <td class="tble_attr">
+                                                            <span>2022-12-14</span>
+                                                            <h5>13:31:23</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Ticker 1</span>
+                                                            <h5>BTCUSDT</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Ticker 2</span>
+                                                            <h5>ETHUSDT</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>P-Value</span>
+                                                            <h5>0.017</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Coint</span>
+                                                            <h5>Yes</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Profile Match</span>
+                                                            <h5>No</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Hedge Ratio</span>
+                                                            <h5>Yes</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Z-Score</span>
+                                                            <h5>-1.26</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Ad Fuller</span>
+                                                            <h5>-4.57</h5>
+                                                        </td>
+                                                        <td class="tble_attr">
+                                                            <span>Half Life</span>
+                                                            <h5>9</h5>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ stiped-table ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}

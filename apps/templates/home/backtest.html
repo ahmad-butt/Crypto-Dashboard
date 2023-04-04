@@ -62,11 +62,12 @@
                                                     <input type="date" id="start_date" name="start_date" />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>End Date</label>
-                                                    <input type="date" id="end_date" name="end_date"/>
+                                                    <label>End Date </label>
+                                                    <input type="date" id="end_date" name="end_date" />
                                                 </div>
                                                 <div class="input-group-append">
-                                                    <button id="run" type="submit" class="btn btn-secondary">Run</button>
+                                                    <button id="run" type="submit"
+                                                        class="btn btn-secondary">Run</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,21 +88,21 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#run').attr("data-original-text", $('#run').html());
-            $('form').submit(function() {
-                $('#run').prop("disabled", true);
-              // add spinner to button
-                $('#run').html(
-                    `<span id='loading' class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
-                );
-            })
-            $('#run').prop("disabled", false);
-            $('#run').html($(elem).attr("data-original-text"));
-        });
-    </script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#run').attr("data-original-text", $('#run').html());
+        $('form').submit(function () {
+            $('#run').prop("disabled", true);
+            // add spinner to button
+            $('#run').html(
+                `<span id='loading' class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+            );
+        })
+        $('#run').prop("disabled", false);
+        $('#run').html($(elem).attr("data-original-text"));
+    });
+</script>
 {% endblock javascripts %}
