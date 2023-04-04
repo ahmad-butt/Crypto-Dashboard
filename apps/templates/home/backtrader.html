@@ -1,0 +1,142 @@
+{% extends "layouts/base.html" %}
+{% block title %} UI Tables {% endblock %}
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+{% block content %}
+<!-- [ Main Content ] start -->
+<section class="pcoded-main-container">
+  <div class="pcoded-wrapper">
+    <div class="pcoded-content">
+      <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+          <div class="page-block">
+            <div class="row align-items-center">
+              <div class="col-md-12">
+                <div class="page-header-title">
+                  <h5 class="m-b-10">Backtrader</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+          <div class="page-wrapper">
+            <!-- [ Main Content ] start -->
+            <div class="row">
+              <!-- [ basic-table ] start -->
+              <div class="col-xl-12">
+                <form method="post" action="get_form_features" enctype="multipart/form-data">
+                  {{ form.as_p }}
+                  {% csrf_token %}
+                  <div class="file-upload-wrapper">
+                    <span>Add Your Dataset<span>
+                      <input type="file" id="input-file-max-fs" class="file-upload" data-max-file-size="2M" name="file-upload"
+                        accept="csv" />
+                  </div>
+                  <div class="input-group-append">
+                    <button id="run" type="submit" class="btn btn-secondary">Get Features</button>
+                  </div>
+                </form>
+                <form method='post' action='run_backtrader'>
+                  {% csrf_token %}
+                  <div class="card">
+                    <div class="card-header">
+                      <h5>General Comparison</h5>
+                    </div>
+                    <div class="card-block table-border-style">
+                      <div class="table-responsive">
+                        <p>Select options</p>
+                        <div class="form-group">
+                          <label>Compare From Feature</label>
+                          <select class="form-control" name="compare_from_feature">
+                            {% for feature in filtered_features %}
+                            <option value={{feature}}>{{feature}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="first_multiplier">First Multiplier</label>
+                          <input type="number" id="first_multiplier" name="first_multiplier" min="1" max="100">
+                        </div>
+                        <div class="form-group">
+                          <label>Compare to Feature</label>
+                          <select class="form-control"  name="compare_to_feature">
+                            {% for feature in filtered_features %}
+                            <option value={{feature}}>{{feature}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="second_multiplier">second Multiplier</label>
+                          <input type="number" id="second_multiplier" name="second_multiplier" min="1" max="100">
+                        </div>
+                        <div class="form-group">
+                          <label>Look Back Period</label>
+                          <select class="form-control" name="lookback_period">
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="7">7</option>
+                            <option value="14">14</option>
+                            <option value="30">30</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Comparison</label>
+                          <select class="form-control" id="relation" name="relation">
+                            <option value=">">Greater Than</option>
+                            <option value="<"> Less Than </option>
+                            <option value="=">Equals</option>
+                            <option value="!=">Not Equals</option>
+                            <option value=">=">Greater Than Equals</option>
+                            <option value="<=">Less Than Equals Equals</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Action</label>
+                          <select class="form-control" id="action" name="action">
+                            <option value="long-entry">Buy Long</option>
+                            <option value="short-exit">Sell Short</option>
+                            <option value="long-exit">Close Long</option>
+                            <option value="short-entry">Close Short</option>
+                          </select>
+                        </div>
+                        <br>
+                        <div class="input-group-append">
+                          <button id="run" type="submit" class="btn btn-secondary">Run Backtest</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- [ Main Content ] end -->
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#run').attr("data-original-text", $('#run').html());
+    $('form').submit(function () {
+      $('#run').prop("disabled", true);
+      // add spinner to button
+      $('#run').html(
+        `<span id='loading' class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    })
+    $('#run').prop("disabled", false);
+    $('#run').html($(elem).attr("data-original-text"));
+  });
+</script>
+{% endblock javascripts %}
