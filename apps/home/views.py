@@ -13,15 +13,39 @@ import requests
 from .models import CurrencyPreference
 from django.views.decorators.csrf import csrf_protect
 import strategies
-import requests
 from datetime import datetime
 from nlp import SentimentAnalysis
+import twint
+import pandas as pd
+import json
 
 
 def get_crypto_news():
     url = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN&api_key=08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a"
     response = requests.get(url)
     return response.json()
+
+def get_crypto_tweets():
+    # c = twint.Config()
+    # c.Search = "crypto OR bitcoin OR ethereum OR binance" # Can add other keyword if needed
+    # c.Min_likes = 100
+    # c.Limit = 10
+    # c.Popular_tweets = True
+    # c.Lang = 'en'
+    # c.Hide_output = True
+    # c.Pandas = True
+
+    # twint.run.Search(c)
+
+    # df = pd.DataFrame(twint.storage.panda.Tweets_df)
+    # df = df.drop_duplicates(subset="id")
+    # df = df.loc[:, ["username", "tweet", "nlikes", "nreplies", "nretweets", "link"]] # Only need these columns, other columns available in df
+    # json_str = df.to_json(orient='records') 
+    # json_obj = json.loads(json_str)
+    # return json_obj
+
+    response =  [{'username': 'SerLondonCrypto', 'tweet': '$100 to someone who follows me and retweets this within 48 hours ✅�💰', 'nlikes': 186, 'nreplies': 132, 'nretweets':61, 'link': 'https://twitter.com/SerLondonCrypto/status/1644011552255737857'}]
+    return response
 
 
 # def view_all_news(request):
@@ -45,6 +69,7 @@ def index(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
 
     news_res = get_crypto_news()
+    tweet_res = get_crypto_tweets()
 
     sa = SentimentAnalysis(news_res)
 
@@ -63,7 +88,8 @@ def index(request):
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["Data"][0:5]
+        'news': news_res["Data"][0:5],
+        'tweet': tweet_res
     }
 
     html_template = loader.get_template('home/index.html')
