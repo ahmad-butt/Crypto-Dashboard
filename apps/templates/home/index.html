@@ -4,6 +4,8 @@
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
+<link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.carousel.min.css" />
+<link rel="stylesheet" href="/bower_components/owl.carousel/dist/assets/owl.carousel.min.css" />
 <style>
     h3{
         color: #9E9E9E;
@@ -315,108 +317,17 @@
                                 </div>
                             </div>
                             <!--[ Recent Users ] end-->
-                            <!--[ Recent Users ] start-->
-                            <div style="margin-top: 20px" class="col-xl-8 col-md-6">
-                                <div style="width: 74vw;" class="card Recent-Users">
-                                    <div class="card-header">
-                                        <h5>Recent News</h5>
-                                    </div>
-                                    <div class="card-block px-0 py-3">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover">
-                                                <tbody>
-                                                    {% for t in tweet %}
-                                                    <tr class="unread">
-                                                        <!-- <td><img class="rounded-circle" style="width:40px;"
-                                                                src={{n.imageurl}}
-                                                                alt="activity-user">
-                                                        </td> -->
-                                                        <td style="white-space: unset;">
-                                                            <h6 class="mb-1">{{t.username}}</h6>
-                                                            <p style="font-size: 10px; margin-bottom: 10px" class="mb-1">{{t.nlikes}}</p>
-                                                            <p class="m-0">{{t.tweet}}</p>
-                                                        </td>
-                                                        <!-- <td>
-                                                            <h6 style="margin-top: 10px;" class="text-muted">
-                                                                <i
-                                                                    {% if n.sentiment == "Positive" %}
-                                                                        class="fas fa-circle text-c-green f-10 m-r-15"
-                                                                    {% elif n.sentiment == "Negative" %}
-                                                                        class="fas fa-circle text-c-red f-10 m-r-15"
-                                                                    {% else %}
-                                                                        class="fas fa-circle text-c-grey f-10 m-r-15"
-                                                                    {% endif %}
-                                                                >
-                                                                </i>
-                                                                {{n.sentiment}}
-                                                            </h6>
-                                                        </td> -->
-                                                        <td>
-                                                            <a
-                                                                href={{t.link}}
-                                                                class="label theme-bg text-white f-12"
-                                                                target="_blank"
-                                                                >
-                                                                Read
-                                                            </a>
-                                                        </td>
-                                                        <!-- <td style="white-space: unset;">
-                                                            <div class="container d-flex justify-content-center">
-                                                                <a style="margin-top: 5px; cursor:pointer; margin-left:-30px;" class="label theme-bg text-white f-12" data-toggle="modal" data-target="#my-modal{{n.id}}">Summary</a>
-                                                                <div id="my-modal{{n.id}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                                                                    <div class="modal-dialog  modal-dialog-centered justify-content-center " role="document">
-                                                                        <div class="modal-content  border-0 mx-3">   
-                                                                            <div class="modal-body  p-0">
-                                                                                <div style="
-                                                                                    margin-bottom: 0px; border-radius:0;
-                                                                                    width: calc(600px + 10 * ((100vw - 320px) / 680)) ;
-                                                                                    border-top-color: #F9E8C7 !important;
-                                                                                    padding-left: 0 !;
-                                                                                " class="card text-center">
-                                                                                    <div class="card-header pb-0 bg-white border-0"><div class="row"><div class="col ml-auto"><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div> </div><img src={{n.imageurl}} class="img-fluid mt-5" />
-                                                                                    <h3>
-                                                                                        {{n.title}}
-                                                                                    </h3></div>
-                                                                                    <div class="card-body px-sm-5 mb-5">
-                                                                                        <p class="text-muted mb-0">
-                                                                                            {{n.body}}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </td> -->
-                                                    </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <td>
-                                            <div class="input-group-append">
-                                                <a style="margin: auto;" href="/view_all_news.html">
-                                                    <button type="button" class="btn btn-secondary">View All</button>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--[ Recent Users ] end-->
                         </div>
                         <!-- [ Main Content ] end -->
 
                         <div class="gtco-testimonials">
-                            <h2>Popular On Twitter</h2>
                             <div class="owl-carousel owl-carousel1 owl-theme">
                                 {% for t in tweet %}
                                 <div>
                                 <div class="card text-center"><img class="card-img-top" src="https://images.unsplash.com/photo-1572561300743-2dd367ed0c9a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=300&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=50&w=300" alt="">
                                     <div class="card-body">
                                     <h5>{{t.username}} <br />
-                                        <span> {{t.username}} </span>
+                                        <span> {{t.name}} </span>
                                     </h5>
                                     <p class="card-text">“ {{t.tweet}} ” </p>
                                     </div>
@@ -440,6 +351,8 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script> src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"</script>
+<script> src="https://code.jquery.com/jquery-2.2.4.min.js"</script>
 <script>
     (function () {
     "use strict";
@@ -490,4 +403,8 @@
         }
     }
 </script>
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/bower_components/owl.carousel/dist/owl.carousel.min.js"></script>
 {% endblock javascripts %}
