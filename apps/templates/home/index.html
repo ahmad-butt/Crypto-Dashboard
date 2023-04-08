@@ -34,6 +34,19 @@
             width: unset;
         } 
     }
+    .card {
+        width: 30%;
+      position: relative;
+      top: 0;
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 -0.05rem 1rem rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+    }
+    .myrow{
+        display: flex;
+        gap: 1rem;
+    }
 </style>
 {% endblock stylesheets %}
 
@@ -216,6 +229,16 @@
                             <!--[ Recent Users ] end-->
                         </div>
                         <!-- [ Main Content ] end -->
+                        <div class="myrow">
+                            
+                                {% for r in reddit %}
+                                <div class="card">
+                                    <h2>{{r.author}}</h2>
+                                    <p>{{r.title}}</p>
+                                </div>
+                                {% endfor %}
+                            
+                        </div>
                     </div>
                 </div>
             </div>

@@ -58,7 +58,7 @@ def get_reddit_stuff():
     for post in top_posts:
         if post.is_self:
             reddit_result.append({"author": str(post.author), "title": str(post.title), "subreddit": str(post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
-    return reddit_result
+    return reddit_result[:3]
 
 
 # def view_all_news(request):
