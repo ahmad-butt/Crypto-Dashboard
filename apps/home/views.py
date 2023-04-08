@@ -25,6 +25,8 @@ from datetime import datetime
 from nlp import SentimentAnalysis
 
 # temporary
+
+
 def error(request, msg):
     # msg = request.GET.get('msg')
     context = {
@@ -48,7 +50,6 @@ def get_crypto_news():
 #     }
 
 #     return HttpResponseRedirect('home/view_all_news.html', context)
-
 
 
 @login_required(login_url="/login/")
@@ -123,11 +124,11 @@ def run_backtest(request):
         "Max Drawdown": pf.stats()["Max Drawdown [%]"],
     }
 
-    chart_data = pf.plot(subplots = [
-             'orders',
-             'cum_returns',
-             'drawdowns',
-             'trades']).to_html()
+    chart_data = pf.plot(subplots=[
+        'orders',
+        'cum_returns',
+        'drawdowns',
+        'trades']).to_html()
 
     context = {
         'chart_data': chart_data,
@@ -171,7 +172,7 @@ def run_technical_indicators(request):
 
         data = request.POST.dict()
         indicators_list = request.POST.getlist('indicators')
-        result = utils.calculate_technical_indicators_multiple(
+        result = utils.calculate_technical_indicators(
             indicators_list, file_url)
         print(type(result))
         context = {
@@ -237,6 +238,7 @@ def coint_pairs(request):
     }
     return render(request, 'home/coint_pairs.html', context)
 
+
 @csrf_protect
 def pair_backtest(request, ticker1, ticker2):
     pf = coint_pairs_strategy.run_coint_backtest([ticker1, ticker2])[1]
@@ -259,17 +261,18 @@ def pair_backtest(request, ticker1, ticker2):
         "Max Drawdown": pf.stats()["Max Drawdown [%]"],
     }
 
-    chart_data = pf.plot(subplots = [
-             'orders',
-             'cum_returns',
-             'drawdowns',
-             'trades']).to_html()
+    chart_data = pf.plot(subplots=[
+        'orders',
+        'cum_returns',
+        'drawdowns',
+        'trades']).to_html()
 
     context = {
         'chart_data': chart_data,
         'data': data,
     }
     return render(request, 'home/backtest_results.html', context)
+
 
 @login_required(login_url="/login/")
 def pages(request):
@@ -298,6 +301,8 @@ def pages(request):
             for k in currencies.json()['Data']:
                 symbols.append(k)
             context['symbols'] = symbols
+            # Getting Tickers for Form Selection
+            context['tickers'] = utils.get_tickers()
         elif load_template == 'coint_pairs.html':
             context = {
                 "range": range(20),
@@ -317,9 +322,6 @@ def pages(request):
                 'all_news': news_res,
                 'range': range(0, len(news_res["Data"]))
             }
-
-            # Getting Tickers for Form Selection
-            context['tickers'] = utils.get_tickers()
 
         context['segment'] = load_template
         html_template = loader.get_template('home/' + load_template)
