@@ -36,6 +36,9 @@ def filter_features(fileurl):
 
 
 def calculate_technical_indicators_multiple(indicators, fileurl):
+
+
+def calculate_technical_indicators(indicators, fileurl):
     data = pd.read_csv('./'+fileurl)
     print(data.shape)
 
@@ -151,6 +154,15 @@ class Rule:
         self.lag = l
         self.relation = r
         self.kind = k
+
+
+class TradePair:
+    ticker1: str
+    ticker2: str
+    p_value: float
+    hedge_ratio: float
+    coint_t: float
+    critical_value: float
 
 
 def get_tickers():
