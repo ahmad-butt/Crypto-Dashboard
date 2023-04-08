@@ -35,9 +35,6 @@ def filter_features(fileurl):
     return data.columns.values
 
 
-def calculate_technical_indicators_multiple(indicators, fileurl):
-
-
 def calculate_technical_indicators(indicators, fileurl):
     data = pd.read_csv('./'+fileurl)
     print(data.shape)
