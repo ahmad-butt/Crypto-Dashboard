@@ -57,7 +57,7 @@ def get_reddit_stuff():
 
     for post in top_posts:
         if post.is_self:
-            reddit_result.append({"author": str(post.author), "title:": post.title, "subreddit": str(post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
+            reddit_result.append({"author": str(post.author), "title": str(post.title), "subreddit": str(post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
     return reddit_result
 
 
@@ -83,7 +83,6 @@ def index(request):
 
     news_res = get_crypto_news()
     reddit_res = get_reddit_stuff()
-    print(reddit_res)
 
     sa = SentimentAnalysis(news_res)
 
