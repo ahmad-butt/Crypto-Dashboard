@@ -26,6 +26,7 @@
     .tbl_row {
         display: flex;
     }
+
 </style>
 {% endblock stylesheets %}
 
@@ -54,47 +55,41 @@
                                         <div class="table-responsive">
                                             <table class="table table-striped">
                                                 <tbody>
-                                                    {% for i in range %}
+                                                    {% for r in pairs %}
+                                                    
                                                     <tr class="tbl_row">
-                                                        <td class="tble_attr">
-                                                            <span>2022-12-14</span>
-                                                            <h5>13:31:23</h5>
+                                                        <td >
+                                                            <a
+                                                                href="{% url 'pair_backtest' r.ticker1 r.ticker2 %}"
+                                                                class="label theme-bg text-white f-12"
+                                                                target="_blank"
+                                                                >
+                                                                Run Test
+                                                            </a>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>Ticker 1</span>
-                                                            <h5>BTCUSDT</h5>
+                                                            <h5>{{r.ticker1}}</h5>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>Ticker 2</span>
-                                                            <h5>ETHUSDT</h5>
+                                                            <h5>{{r.ticker2}}</h5>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>P-Value</span>
-                                                            <h5>0.017</h5>
-                                                        </td>
-                                                        <td class="tble_attr">
-                                                            <span>Coint</span>
-                                                            <h5>Yes</h5>
-                                                        </td>
-                                                        <td class="tble_attr">
-                                                            <span>Profile Match</span>
-                                                            <h5>No</h5>
+                                                            <h5>{{r.p_value}}</h5>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>Hedge Ratio</span>
-                                                            <h5>Yes</h5>
+                                                            <h5>{{r.hedge_ratio}}</h5>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>Z-Score</span>
-                                                            <h5>-1.26</h5>
+                                                            <h5>{{r.coint_t}}</h5>
                                                         </td>
                                                         <td class="tble_attr">
                                                             <span>Ad Fuller</span>
-                                                            <h5>-4.57</h5>
-                                                        </td>
-                                                        <td class="tble_attr">
-                                                            <span>Half Life</span>
-                                                            <h5>9</h5>
+                                                            <h5>{{r.critical_value}}</h5>
                                                         </td>
                                                     </tr>
                                                     {% endfor %}
