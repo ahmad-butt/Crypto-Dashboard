@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Profile {% endblock %} 
+{% block title %} Profile {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -9,52 +9,48 @@
 
 <div class="pcoded-main-container">
   <div class="pcoded-wrapper">
-      <div class="pcoded-content">
-          <div class="pcoded-inner-content">
-              <div class="main-body">
-                  <div class="page-wrapper">
-                      <div class="row">
-                        <div class="col-xl-12">
-                          <div class="card">
-                            <div class="card-header">
-                              <h5>Stats</h5>
-                            </div>
-                            <div class="card-block table-border-style">
-                              <div class="table-responsive">
-                                <table class="table table-striped">
-                                  <thead>
-                                    <tr>
-                                      <th>#</th>
-                                      <th>Key</th>
-                                      <th>Value</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {% for k,v in data.items %}
-                                    <tr>
-                                      <th scope="row">{{forloop.counter}}</th>
-                                      <td>{{k}}</td>
-                                      <td>{{v}}</td>
-                                    </tr>
-                                    {% endfor %}
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- [ stiped-table ] end -->
+    <div class="pcoded-content">
+      <div class="pcoded-inner-content">
+        <div class="main-body">
+          <div class="page-wrapper">
+            <div style="margin-bottom: 30px;">
+              <h4>Stats From <span style="font-weight: bold">{{Start}}</span> to <span style="font-weight: bold">{{End}}</span></h4>
+            </div>
+            <div style="margin-bottom: 20px;" class="row">
+              {% for k,v in data.items %}
+
+                <div style="
+                    display: flex;
+                    flex-direction: row;
+                    width: fit-content;
+                    margin-left: 10px;
+                    margin-bottom: 10px;
+                  " class="card">
+                  <div class="card-block">
+                    <p class="mb-4">{{second_curr}}{{k}}</p>
+                    <div class="row d-flex align-items-center">
+                      <div class="col-9  d-flex align-items-center  m-b-0">
+                        <!-- <i class="feather icon-arrow-down text-c-red f-30 m-r-10">
+                                </i> -->
+                        <h5 style="font-weight: bold" id="curr_1" class="f-w-300">
+                          {{v}}</h5>
                       </div>
-                        <div id="chart"></div>
-                        <script>
-                          vegaEmbed("#chart", {{ chart_data| safe }}
-                        </script> 
-                      <!-- [ Main Content ] end -->
+                    </div>
                   </div>
-              </div>
+                </div>
+              {% endfor %}
+              <!-- [ stiped-table ] end -->
+            </div>
+            <div id="chart"></div>
+            <script>
+              vegaEmbed("#chart", {{ chart_data| safe }}
+            </script>
+            <!-- [ Main Content ] end -->
           </div>
+        </div>
       </div>
-      
+    </div>
+
   </div>
 </div>
 <!-- [ Main Content ] end -->

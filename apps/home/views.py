@@ -25,6 +25,8 @@ from datetime import datetime
 from nlp import SentimentAnalysis
 
 # temporary
+
+
 def error(request, msg):
     # msg = request.GET.get('msg')
     context = {
@@ -48,7 +50,6 @@ def get_crypto_news():
 #     }
 
 #     return HttpResponseRedirect('home/view_all_news.html', context)
-
 
 
 @login_required(login_url="/login/")
@@ -106,30 +107,30 @@ def run_backtest(request):
     pf = strategies.run_backtest()
 
     data = {
-        "Start": pf.stats()["Start"],
-        "End": pf.stats()["End"],
         "Period": pf.stats()["Period"],
         "Start Value": pf.stats()["Start Value"],
-        "End Value": pf.stats()["End Value"],
+        "End Value": round(pf.stats()["End Value"], 2),
         "Total Trades": pf.stats()["Total Trades"],
-        "Win Rate": pf.stats()["Win Rate [%]"],
-        "Best Trade": pf.stats()["Best Trade [%]"],
-        "Worst Trade": pf.stats()["Worst Trade [%]"],
-        "Avg Win Trade": pf.stats()["Avg Winning Trade [%]"],
-        "Avg Losing Trade": pf.stats()["Avg Losing Trade [%]"],
-        "Total Profit": pf.total_profit(),
-        "Total Return": pf.stats()["Total Return [%]"],
+        "Win Rate": round(pf.stats()["Win Rate [%]"], 2),
+        "Best Trade": round(pf.stats()["Best Trade [%]"], 2),
+        "Worst Trade": round(pf.stats()["Worst Trade [%]"], 2),
+        "Avg Win Trade": round(pf.stats()["Avg Winning Trade [%]"], 2),
+        "Avg Losing Trade": round(pf.stats()["Avg Losing Trade [%]"], 2),
+        "Total Profit": round(pf.total_profit(), 2),
+        "Total Return": round(pf.stats()["Total Return [%]"], 2),
         "Total Fees Paid": pf.stats()["Total Fees Paid"],
-        "Max Drawdown": pf.stats()["Max Drawdown [%]"],
+        "Max Drawdown": round(pf.stats()["Max Drawdown [%]"], 2),
     }
 
-    chart_data = pf.plot(subplots = [
-             'orders',
-             'cum_returns',
-             'drawdowns',
-             'trades']).to_html()
+    chart_data = pf.plot(subplots=[
+        'orders',
+        'cum_returns',
+        'drawdowns',
+        'trades']).to_html()
 
     context = {
+        "Start": pf.stats()["Start"],
+        "End": pf.stats()["End"],
         'chart_data': chart_data,
         'data': data,
     }
@@ -242,6 +243,7 @@ def coint_pairs(request):
     }
     return render(request, 'home/coint_pairs.html', context)
 
+
 @csrf_protect
 def pair_backtest(request, ticker1, ticker2):
     pf = coint_pairs_strategy.run_coint_backtest([ticker1, ticker2])[1]
@@ -264,17 +266,18 @@ def pair_backtest(request, ticker1, ticker2):
         "Max Drawdown": pf.stats()["Max Drawdown [%]"],
     }
 
-    chart_data = pf.plot(subplots = [
-             'orders',
-             'cum_returns',
-             'drawdowns',
-             'trades']).to_html()
+    chart_data = pf.plot(subplots=[
+        'orders',
+        'cum_returns',
+        'drawdowns',
+        'trades']).to_html()
 
     context = {
         'chart_data': chart_data,
         'data': data,
     }
     return render(request, 'home/backtest_results.html', context)
+
 
 @login_required(login_url="/login/")
 def pages(request):
