@@ -3,7 +3,7 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from apps.home import views
 
 urlpatterns = [
@@ -19,8 +19,11 @@ urlpatterns = [
     path('run_backtrader', views.run_backtrader, name='backtrader'),
     path('get_form_features', views.get_form_features, name='get_features'),
 
-    # path('view_all_news', views.view_all_news, name='view_all_news'),
+    path('pair_backtest/<str:ticker1>/<str:ticker2>/', views.pair_backtest, name='pair_backtest'),
+    path('error/<str:msg>/', views.error, name='error'), #temp
+    path('coint_pairs', views.coint_pairs, name='coint_pairs'),
 
+    # path('view_all_news', views.view_all_news, name='view_all_news'),
 
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),

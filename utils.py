@@ -20,7 +20,6 @@ import time
 import vectorbt as vbt
 
 
-@staticmethod
 def get_crypto_data(symbol, interval, start, end):
     data = yf.download(tickers=symbol, start=start, end=end, interval=interval)
     filename = symbol+"_"+start+"_"+end+"_"+interval+"_interval.csv"
@@ -33,8 +32,6 @@ def filter_features(fileurl):
     print(data.shape)
     return data.columns.values
 
-
-@staticmethod
 def calculate_technical_indicators(indicators, fileurl):
     data = pd.read_csv('./'+fileurl)
     print(data.shape)
@@ -149,3 +146,11 @@ class Rule:
         self.lag = l
         self.relation = r
         self.kind = k
+
+class TradePair:
+    ticker1: str
+    ticker2: str
+    p_value: float
+    hedge_ratio: float
+    coint_t: float
+    critical_value: float

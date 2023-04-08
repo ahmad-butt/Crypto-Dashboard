@@ -12,16 +12,25 @@ from django.urls import reverse
 import requests
 from .models import CurrencyPreference
 from django.views.decorators.csrf import csrf_protect
-import strategies
 
 import utils
+import strategies
+import coint_pairs_strategy
 import pandas as pd
 import numpy as np
-from utils import Rule
+from utils import Rule, TradePair
 
 import requests
 from datetime import datetime
 from nlp import SentimentAnalysis
+
+# temporary
+def error(request, msg):
+    # msg = request.GET.get('msg')
+    context = {
+        'msg': msg,
+    }
+    return render(request, 'home/error.html', context)
 
 
 def get_crypto_news():
@@ -114,8 +123,14 @@ def run_backtest(request):
         "Max Drawdown": pf.stats()["Max Drawdown [%]"],
     }
 
+    chart_data = pf.plot(subplots = [
+             'orders',
+             'cum_returns',
+             'drawdowns',
+             'trades']).to_html()
+
     context = {
-        'chart_data': pf.plot().to_html(),
+        'chart_data': chart_data,
         'data': data,
     }
     return render(request, 'home/backtest_results.html', context)
@@ -204,6 +219,62 @@ def run_backtrader(request):
     }
     return render(request, 'home/backtrader.html', context)
 
+
+@csrf_protect
+def coint_pairs(request):
+    responses = requests.get('http://127.0.0.1:8080/api').json()
+    pairs = []
+    for response in responses:
+        tp = TradePair()
+        tp.id = response['id']
+        tp.ticker1 = response['ticker1']
+        tp.ticker2 = response['ticker2']
+        tp.p_value = response['p_value']
+        tp.hedge_ratio = response['hedge_ratio']
+        tp.coint_t = response['coint_t']
+        tp.critical_value = response['critical_value']
+
+        pairs.append(tp)
+
+    context = {
+        'range': range(len(pairs)),
+        'pairs': pairs,
+    }
+    return render(request, 'home/coint_pairs.html', context)
+
+@csrf_protect
+def pair_backtest(request, ticker1, ticker2):
+    pf = coint_pairs_strategy.run_coint_backtest([ticker1, ticker2])[1]
+
+    data = {
+        "Start": pf.stats()["Start"],
+        "End": pf.stats()["End"],
+        "Period": pf.stats()["Period"],
+        "Start Value": pf.stats()["Start Value"],
+        "End Value": pf.stats()["End Value"],
+        "Total Trades": pf.stats()["Total Trades"],
+        "Win Rate": pf.stats()["Win Rate [%]"],
+        "Best Trade": pf.stats()["Best Trade [%]"],
+        "Worst Trade": pf.stats()["Worst Trade [%]"],
+        "Avg Win Trade": pf.stats()["Avg Winning Trade [%]"],
+        "Avg Losing Trade": pf.stats()["Avg Losing Trade [%]"],
+        "Total Profit": pf.total_profit(),
+        "Total Return": pf.stats()["Total Return [%]"],
+        "Total Fees Paid": pf.stats()["Total Fees Paid"],
+        "Max Drawdown": pf.stats()["Max Drawdown [%]"],
+    }
+
+    chart_data = pf.plot(subplots = [
+             'orders',
+             'cum_returns',
+             'drawdowns',
+             'trades']).to_html()
+
+    context = {
+        'chart_data': chart_data,
+        'data': data,
+    }
+    return render(request, 'home/backtest_results.html', context)
 
 @login_required(login_url="/login/")
 def pages(request):
