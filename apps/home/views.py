@@ -75,7 +75,7 @@ def run_data_builder(request):
         print(symbol, interval, start_date, end_date)
 
     result = utils.get_crypto_data(symbol, interval, start_date, end_date)
-    print(type(result))
+    print(result.columns)
     context = {
         'result': result,
     }
@@ -92,14 +92,9 @@ def run_technical_indicators(request):
         file_url = fss.url(file)
 
         data = request.POST.dict()
-        first = data.get("first")
-        second = data.get("second")
-        third = data.get("third")
-        fourth = data.get("fourth")
-        fifth = data.get("fifth")
-        print(first, second, third, fourth, fifth)
-        indicators = [first, second, third, fourth, fifth]
-        result = utils.calculate_technical_indicators(indicators, file_url)
+        indicators_list = request.POST.getlist('indicators')
+        result = utils.calculate_technical_indicators_multiple(
+            indicators_list, file_url)
         print(type(result))
         context = {
             'indicator_result': result,
@@ -159,6 +154,9 @@ def pages(request):
             for k in currencies.json()['Data']:
                 symbols.append(k)
             context['symbols'] = symbols
+
+            # Getting Tickers for Form Selection
+            context['tickers'] = utils.get_tickers()
 
         context['segment'] = load_template
         html_template = loader.get_template('home/' + load_template)

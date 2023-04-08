@@ -18,12 +18,13 @@ import ta
 import talib as ta_lib
 import time
 import vectorbt as vbt
+from yahooquery import Screener
 
 
-@staticmethod
 def get_crypto_data(symbol, interval, start, end):
     data = yf.download(tickers=symbol, start=start, end=end, interval=interval)
     filename = symbol+"_"+start+"_"+end+"_"+interval+"_interval.csv"
+    data = data.reset_index()
     data.to_csv(filename)
     return data
 
@@ -34,8 +35,7 @@ def filter_features(fileurl):
     return data.columns.values
 
 
-@staticmethod
-def calculate_technical_indicators(indicators, fileurl):
+def calculate_technical_indicators_multiple(indicators, fileurl):
     data = pd.read_csv('./'+fileurl)
     print(data.shape)
 
@@ -68,10 +68,12 @@ def calculate_technical_indicators(indicators, fileurl):
             new_data = calculate_stochastic(open_prices, close_prices,
                                             high_prices, low_prices, volume, data)
         elif indicator == 'macd':
-            calculate_macd(open_prices, close_prices,
-                           high_prices, low_prices, volume, data)
+            new_data = calculate_macd(open_prices, close_prices,
+                                      high_prices, low_prices, volume, data)
         else:
             continue
+    new_data = new_data.fillna(method="bfill")
+    new_data = new_data.dropna()
     return new_data
 
 
@@ -149,3 +151,14 @@ class Rule:
         self.lag = l
         self.relation = r
         self.kind = k
+
+
+def get_tickers():
+    s = Screener()
+    data = s.get_screeners('all_cryptocurrencies_us', count=250)
+
+    # # data is in the quotes key
+    dicts = data['all_cryptocurrencies_us']['quotes']
+    tickers = [d['symbol'] for d in dicts]
+    print(len(tickers))
+    return tickers
