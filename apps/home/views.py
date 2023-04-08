@@ -208,10 +208,23 @@ def run_backtrader(request):
         relation = data.get("relation")
         kind = data.get("action")
 
-    rule = Rule(ticker1, ticker2, constant1,
-                constant2, lag, relation, kind)
+        rule1 = Rule(ticker1, ticker2, constant1,
+                     constant2, lag, relation, kind)
+
+        ticker1 = data.get("compare_from_feature")
+        constant1 = data.get("first_multiplier")
+        ticker2 = data.get("compare_to_feature")
+        constant2 = data.get("second_multiplier")
+        lag = data.get("lookback_period")
+        relation = data.get("relation")
+        kind = data.get("action")
+
+        rule2 = Rule(ticker1, ticker2, constant1,
+                     constant2, lag, relation, kind)
+
     context = {
-        'rule': rule,
+        'rule1': rule1,
+        'rule2': rule2,
     }
     return render(request, 'home/backtrader.html', context)
 
