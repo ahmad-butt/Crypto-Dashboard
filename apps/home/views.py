@@ -24,6 +24,9 @@ import requests
 from datetime import datetime
 from nlp import SentimentAnalysis
 
+import praw
+from random import shuffle
+
 # temporary
 
 
@@ -39,6 +42,23 @@ def get_crypto_news():
     url = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN&api_key=08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a"
     response = requests.get(url)
     return response.json()
+
+def get_reddit_stuff():
+    reddit = praw.Reddit(client_id='1Y428g9EqZzOuuHWZhDinA',
+                        client_secret='fb7n48JlUEuHmDgZXnRHrPES2yoHUA',
+                        user_agent='GetCryptoStuff')
+
+    subreddits = ['bitcoin', 'btc', 'CryptoCurrency', 'NFT', 'BitcoinBeginners', 'Ethereum', 'binance', 'coinbase']
+    shuffle(subreddits)
+    reddit_result = []
+
+    subreddit = reddit.subreddit(subreddits[0])
+    top_posts = subreddit.top(limit=50) # currently top posts of all time, can add filter like: time_filter='month'
+
+    for post in top_posts:
+        if post.is_self:
+            reddit_result.append({"author": str(post.author), "title:": post.title, "subreddit": str(post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
+    return reddit_result
 
 
 # def view_all_news(request):
@@ -62,6 +82,8 @@ def index(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
 
     news_res = get_crypto_news()
+    reddit_res = get_reddit_stuff()
+    print(reddit_res)
 
     sa = SentimentAnalysis(news_res)
 
@@ -80,7 +102,8 @@ def index(request):
         'first_curr': user_pref.first_curr,
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
-        'news': news_res["Data"][0:5]
+        'news': news_res["Data"][0:5],
+        'reddit': reddit_res
     }
 
     html_template = loader.get_template('home/index.html')
