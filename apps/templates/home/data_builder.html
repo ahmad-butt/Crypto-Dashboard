@@ -44,13 +44,15 @@
 
                                                 <div class="form-group">
                                                     <label>Crypto Currency</label>
-                                                    <select class="form-control" id="symbol" name="symbol">
-                                                        <!-- {% for symbol in symbols %}
-                                                        <option value={{symbol}}>{{symbol}}</option>
-                                                        {% endfor %} -->
+                                                    <!-- <select class="form-control" id="symbol" name="symbol">
                                                         <option value="BTC-USD">BTC</option>
                                                         <option value="SOL-USD">SOL</option>
                                                         <option value="ETH-USD">ETH</option>
+                                                    </select> -->
+                                                    <select class="form-control" id="symbol" name="symbol">
+                                                        {% for ticker in tickers %}
+                                                        <option value={{ticker}}>{{ticker}}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
@@ -77,28 +79,43 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="data-table">
-                            <h3>Your Dataset</h3>
-                            
-                            <table border="1px solid">
-                                <th>
-                                    {% for col in result.columns %}
-                                <td>
-                                    {{col}}
-                                </td>
-                                {% endfor %}
-                                </th>
-                                {% for index, row in result.iterrows %}
-                                <tr>
-                                    {% for cell in row %}
-                                    <td>
-                                        {{cell}}
-                                    </td>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>  
+
+                        <!-- [ stiped-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Your Dataset</h5>
+                                </div>
+                                <div class="card-block table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <th>
+                                                    {% for col in result.columns %}
+                                                <td>
+                                                    {{col}}
+                                                </td>
+                                                {% endfor %}
+                                                </th>
+                                                {% for index, row in result.iterrows %}
+                                                <tr class="tbl_row">
+                                                    
+                                                    {% for cell in row %}
+                                                    <td class="tble_attr">
+                                                        {{cell}}
+                                                    </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ stiped-table ] end -->
+
+
                     </div>
                 </div>
             </div>

@@ -42,6 +42,32 @@
                                             <div class="table-responsive">
                                                 <p>Select options</p>
                                                 <div class="form-group">
+                                                    <input type="checkbox" class="btn-check" id="btn-rsi" value="rsi" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-rsi" >Relative Strength Index(RSI)</label>
+                                                    
+                                                    <input type="checkbox" class="btn-check" id="btn-stoch" value="stochastic" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-stoch">Stochastic Index(Stoch)</label>
+                                                    
+                                                    <input type="checkbox" class="btn-check" id="btn-mfi" value="mfi" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-mfi">Money Flow Index(MFI)</label>
+                                                    
+                                                    <input type="checkbox" class="btn-check" id="btn-bb" value="bb" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-bb">Bollinger Bands</label>
+                                                    
+                                                    <input type="checkbox" class="btn-check" id="btn-sma" value="sma" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-sma">Simple Moving Average(SMA)</label>
+
+                                                    <input type="checkbox" class="btn-check" id="btn-ema" value="ema" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-ema">Exponential Moving Average(EMA)</label>
+                                                    
+                                                    <input type="checkbox" class="btn-check" id="btn-macd" value="macd" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-macd">MACD</label>
+
+                                                    <input type="checkbox" class="btn-check" id="btn-wma" value="wma" name="indicators" autocomplete="off">
+                                                    <label class="btn btn-primary" for="btn-wma">Weighted Moving Average(SMA)</label>
+
+                                                </div>
+                                                <!-- <div class="form-group">
                                                     <label>Select Indicator 1</label>
                                                     <select value="first" name="first" class="form-control">
                                                         <option value="" name=""></option>
@@ -106,7 +132,7 @@
                                                         <option value="sma" name="sma">Simple Moving Average(SMA)</option>
                                                         <option value="macd" name="macd">MACD</option>
                                                     </select>
-                                                </div>
+                                                </div>-->
                                                 <div class="file-upload-wrapper">
                                                     <span>Add Your Dataset<span>
                                                     <input type="file" id="input-file-max-fs" class="file-upload" data-max-file-size="2M" 
@@ -115,7 +141,7 @@
                                                 <br>
                                                 <div class="input-group-append">
                                                     <button id="run" type="submit" class="btn btn-secondary">Calculate Technical Indicators</button>
-                                                </div>
+                                                </div> 
                                             </div>
                                         </div>
                                     </div>
@@ -123,28 +149,40 @@
                             </div>
                         </div>
                     
-                        <div class="data-table">
-                            <h3>Your Dataset</h3>
-                        
-                            <table border="1px solid">
-                                <th>
-                                    {% for col in indicator_result.columns %}
-                                <td>
-                                    {{col}}
-                                </td>
-                                {% endfor %}
-                                </th>
-                                {% for index, row in indicator_result.iterrows %}
-                                <tr>
-                                    {% for cell in row %}
-                                    <td>
-                                        {{cell}}
-                                    </td>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                            </table>
+                       <!-- [ stiped-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Your Dataset</h5>
+                                </div>
+                                <div class="card-block table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <th>
+                                                    {% for col in indicator_result.columns %}
+                                                <td>
+                                                    {{col}}
+                                                </td>
+                                                {% endfor %}
+                                                </th>
+                                                {% for index, row in indicator_result.iterrows %}
+                                                <tr class="tbl_row">
+                                                    
+                                                    {% for cell in row %}
+                                                    <td class="tble_attr">
+                                                        {{cell}}
+                                                    </td>
+                                                    {% endfor %}
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <!-- [ stiped-table ] end -->
                     
                     </div>
                 </div>
