@@ -85,21 +85,21 @@
                         <div class="form-group">
                           <label>Comparison</label>
                           <select class="form-control" id="relation" name="relation">
-                            <option value=">">Greater Than</option>
-                            <option value="<"> Less Than </option>
-                            <option value="=">Equals</option>
-                            <option value="!=">Not Equals</option>
-                            <option value=">=">Greater Than Equals</option>
-                            <option value="<=">Less Than Equals Equals</option>
+                            <option value="4">Greater Than</option>
+                            <option value="2"> Less Than </option>
+                            <option value="1">Equals</option>
+                            <option value="6">Not Equals</option>
+                            <option value="5">Greater Than Equals</option>
+                            <option value="3">Less Than Equals Equals</option>
                           </select>
                         </div>
                         <div class="form-group">
                           <label>Action</label>
                           <select class="form-control" id="action" name="action">
-                            <option value="long-entry">Buy Long</option>
-                            <option value="short-exit">Sell Short</option>
-                            <option value="long-exit">Close Long</option>
-                            <option value="short-entry">Close Short</option>
+                            <option value="longentry">Buy Long</option>
+                            <option value="shortexit">Sell Short</option>
+                            <option value="longexit">Close Long</option>
+                            <option value="shortentry">Close Short</option>
                           </select>
                         </div>
                         <br>
@@ -114,6 +114,36 @@
             </div>
           </div>
         </div>
+
+        <!-- [ stiped-table ] start -->
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>Rules</h5>
+            </div>
+            <div class="card-block table-border-style">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tbody>
+                    {% for rule in rules %}
+                    <tr class="tbl_row">
+                      <td class="tble_attr">{{rule.ticker1}}</td>
+                      <td class="tble_attr">{{rule.ticker2}}</td>
+                      <td class="tble_attr">{{rule.constant1}}</td>
+                      <td class="tble_attr">{{rule.constant2}}</td>
+                      <td class="tble_attr">{{rule.lag}}</td>
+                      <td class="tble_attr">{{rule.relation}}</td>
+                      <td class="tble_attr">{{rule.kind}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- [ stiped-table ] end -->
+
       </div>
     </div>
   </div>

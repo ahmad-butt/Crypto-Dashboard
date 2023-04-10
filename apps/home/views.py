@@ -163,9 +163,9 @@ def run_backtest(request):
     return render(request, 'home/backtest_results.html', context)
 
 
-@csrf_protect
-def run_backtrader(request):
-    pass
+# @csrf_protect
+# def run_backtrader(request):
+#     pass
 
 
 @csrf_protect
@@ -180,9 +180,10 @@ def run_data_builder(request):
         print(symbol, interval, start_date, end_date)
 
     result = utils.get_crypto_data(symbol, interval, start_date, end_date)
-    print(result.columns)
+    tickers = utils.get_tickers()
     context = {
         'result': result,
+        "tickers": tickers
     }
     return render(request, 'home/data_builder.html', context)
 
@@ -224,6 +225,7 @@ def get_form_features(request):
 
 @csrf_protect
 def run_backtrader(request):
+    rules = []
     if(request.POST):
         data = request.POST.dict()
         ticker1 = data.get("compare_from_feature")
@@ -234,10 +236,12 @@ def run_backtrader(request):
         relation = data.get("relation")
         kind = data.get("action")
 
-    rule = Rule(ticker1, ticker2, constant1,
-                constant2, lag, relation, kind)
+        rule = Rule(ticker1, ticker2, constant1,
+                    constant2, lag, relation, kind)
+        rules.append(rule)
+
     context = {
-        'rule': rule,
+        'rules': rules,
     }
     return render(request, 'home/backtrader.html', context)
 
@@ -322,7 +326,7 @@ def pages(request):
         load_template = request.path.split('/')[-1]
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
-        elif load_template == 'form_elements.html' or load_template == 'backtest.html' or load_template == 'data_builder.html':
+        elif load_template == 'form_elements.html' or load_template == 'backtest.html':
             url = f'https://min-api.cryptocompare.com/data/blockchain/list?api_key=08978f0593d717bf8102e726b40714a51f3fbb7fae0d5409af66fa706028523a'
             currencies = requests.get(url)
             symbols = []
@@ -330,7 +334,11 @@ def pages(request):
                 symbols.append(k)
             context['symbols'] = symbols
             # Getting Tickers for Form Selection
-            context['tickers'] = utils.get_tickers()
+        elif load_template == 'data_builder.html':
+            tickers = utils.get_tickers()
+            context = {
+                "tickers": tickers,
+            }
         elif load_template == 'coint_pairs.html':
             context = {
                 "range": range(20),
