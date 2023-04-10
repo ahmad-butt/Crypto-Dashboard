@@ -43,7 +43,7 @@
                   {% csrf_token %}
                   <div class="card">
                     <div class="card-header">
-                      <h5>Open Position</h5>
+                      <h5>General Comparison</h5>
                     </div>
                     <div class="card-block table-border-style">
                       <div class="table-responsive">
@@ -103,85 +103,47 @@
                           </select>
                         </div>
                         <br>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="card">
-                    <div class="card-header">
-                      <h5>Close Position</h5>
-                    </div>
-                    <div class="card-block table-border-style">
-                      <div class="table-responsive">
-                        <p>Select options</p>
-                        <div class="form-group">
-                          <label>Compare From Feature</label>
-                          <select class="form-control" name="compare_from_feature_2">
-                            {% for feature in filtered_features %}
-                            <option value={{feature}}>{{feature}}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="first_multiplier_2">First Multiplier</label>
-                          <input type="number" id="first_multiplier_2" name="first_multiplier_2" min="1" max="100">
-                        </div>
-                        <div class="form-group">
-                          <label>Compare to Feature</label>
-                          <select class="form-control" name="compare_to_feature_2">
-                            {% for feature in filtered_features %}
-                            <option value={{feature}}>{{feature}}</option>
-                            {% endfor %}
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="second_multiplier_2">second Multiplier</label>
-                          <input type="number" id="second_multiplier_2" name="second_multiplier_2" min="1" max="100">
-                        </div>
-                        <div class="form-group">
-                          <label>Look Back Period</label>
-                          <select class="form-control" name="lookback_period_2">
-                            <option value="1">1</option>
-                            <option value="3">3</option>
-                            <option value="7">7</option>
-                            <option value="14">14</option>
-                            <option value="30">30</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label>Comparison</label>
-                          <select class="form-control" id="relation_2" name="relation_2">
-                            <option value="4">Greater Than</option>
-                            <option value="2"> Less Than </option>
-                            <option value="1">Equals</option>
-                            <option value="6">Not Equals</option>
-                            <option value="5">Greater Than Equals</option>
-                            <option value="3">Less Than Equals Equals</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label>Action</label>
-                          <select class="form-control" id="action_2" name="action_2">
-                            <option value="longentry">Buy Long</option>
-                            <option value="shortexit">Sell Short</option>
-                            <option value="longexit">Close Long</option>
-                            <option value="shortentry">Close Short</option>
-                          </select>
-                        </div>
-                        <br>
                         <div class="input-group-append">
                           <button id="run" type="submit" class="btn btn-secondary">Run Backtest</button>
                         </div>
                       </div>
                     </div>
                   </div>
-
-
                 </form>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- [ stiped-table ] start -->
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>Rules</h5>
+            </div>
+            <div class="card-block table-border-style">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tbody>
+                    {% for rule in rules %}
+                    <tr class="tbl_row">
+                      <td class="tble_attr">{{rule.ticker1}}</td>
+                      <td class="tble_attr">{{rule.ticker2}}</td>
+                      <td class="tble_attr">{{rule.constant1}}</td>
+                      <td class="tble_attr">{{rule.constant2}}</td>
+                      <td class="tble_attr">{{rule.lag}}</td>
+                      <td class="tble_attr">{{rule.relation}}</td>
+                      <td class="tble_attr">{{rule.kind}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- [ stiped-table ] end -->
+
       </div>
     </div>
   </div>
