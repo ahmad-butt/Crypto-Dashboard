@@ -43,21 +43,25 @@ def get_crypto_news():
     response = requests.get(url)
     return response.json()
 
+
 def get_reddit_stuff():
     reddit = praw.Reddit(client_id='1Y428g9EqZzOuuHWZhDinA',
-                        client_secret='fb7n48JlUEuHmDgZXnRHrPES2yoHUA',
-                        user_agent='GetCryptoStuff')
+                         client_secret='fb7n48JlUEuHmDgZXnRHrPES2yoHUA',
+                         user_agent='GetCryptoStuff')
 
-    subreddits = ['bitcoin', 'btc', 'CryptoCurrency', 'NFT', 'BitcoinBeginners', 'Ethereum', 'binance', 'coinbase']
+    subreddits = ['bitcoin', 'btc', 'CryptoCurrency', 'NFT',
+                  'BitcoinBeginners', 'Ethereum', 'binance', 'coinbase']
     shuffle(subreddits)
     reddit_result = []
 
     subreddit = reddit.subreddit(subreddits[0])
-    top_posts = subreddit.top(limit=50) # currently top posts of all time, can add filter like: time_filter='month'
+    # currently top posts of all time, can add filter like: time_filter='month'
+    top_posts = subreddit.top(limit=50)
 
     for post in top_posts:
         if post.is_self:
-            reddit_result.append({"author": str(post.author), "title": str(post.title), "subreddit": str(post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
+            reddit_result.append({"author": str(post.author), "title": str(post.title), "subreddit": str(
+                post.subreddit), "upvotes:": post.score, "comments:": post.num_comments, "url:": post.url})
     return reddit_result[:3]
 
 
@@ -266,21 +270,19 @@ def pair_backtest(request, ticker1, ticker2):
     pf = coint_pairs_strategy.run_coint_backtest([ticker1, ticker2])[1]
 
     data = {
-        "Start": pf.stats()["Start"],
-        "End": pf.stats()["End"],
         "Period": pf.stats()["Period"],
         "Start Value": pf.stats()["Start Value"],
-        "End Value": pf.stats()["End Value"],
+        "End Value": round(pf.stats()["End Value"], 2),
         "Total Trades": pf.stats()["Total Trades"],
-        "Win Rate": pf.stats()["Win Rate [%]"],
-        "Best Trade": pf.stats()["Best Trade [%]"],
-        "Worst Trade": pf.stats()["Worst Trade [%]"],
-        "Avg Win Trade": pf.stats()["Avg Winning Trade [%]"],
-        "Avg Losing Trade": pf.stats()["Avg Losing Trade [%]"],
-        "Total Profit": pf.total_profit(),
-        "Total Return": pf.stats()["Total Return [%]"],
+        "Win Rate": round(pf.stats()["Win Rate [%]"], 2),
+        "Best Trade": round(pf.stats()["Best Trade [%]"], 2),
+        "Worst Trade": round(pf.stats()["Worst Trade [%]"], 2),
+        "Avg Win Trade": round(pf.stats()["Avg Winning Trade [%]"], 2),
+        "Avg Losing Trade": round(pf.stats()["Avg Losing Trade [%]"], 2),
+        "Total Profit": round(pf.total_profit(), 2),
+        "Total Return": round(pf.stats()["Total Return [%]"], 2),
         "Total Fees Paid": pf.stats()["Total Fees Paid"],
-        "Max Drawdown": pf.stats()["Max Drawdown [%]"],
+        "Max Drawdown": round(pf.stats()["Max Drawdown [%]"], 2),
     }
 
     chart_data = pf.plot(subplots=[
@@ -292,6 +294,8 @@ def pair_backtest(request, ticker1, ticker2):
     context = {
         'chart_data': chart_data,
         'data': data,
+        "Start": pf.stats()["Start"],
+        "End": pf.stats()["End"],
     }
     return render(request, 'home/backtest_results.html', context)
 
@@ -300,6 +304,7 @@ def pair_backtest(request, ticker1, ticker2):
 def pages(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
     news_res = get_crypto_news()
+    reddit_res = get_reddit_stuff()
 
     context = {
         'segment': 'index',
@@ -307,6 +312,7 @@ def pages(request):
         'second_curr': user_pref.second_curr,
         'third_curr': user_pref.third_curr,
         'news': news_res["Data"][0:5],
+        'reddit': reddit_res,
     }
 
     # All resource paths end in .html.
