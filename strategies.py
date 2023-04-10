@@ -31,7 +31,7 @@ vbt.settings.data['alpaca']['secret_key'] = SECRET_KEY
 
 # SuperAI Trading Bot
 # replace with preferable time between data: 1m, 5m, 15m, 30m, 1h, 1d
-data_timeframe = '1m'
+data_timeframe = '1d'
 # replace with the limit of the data to download to speed up the process (500, 1000, None)
 data_limit = None
 
@@ -39,7 +39,7 @@ crypto_data_timeframe = TimeFrame.Minute
 preferred_exchange = "CBSE"
 
 data_start = '2022-05-30'  # replace with the starting point for collecting data
-data_end = '2022-06-06'  # replace with the ending point for collecting the data
+data_end = '2022-05-31'  # replace with the ending point for collecting the data
 
 # SuperAI Trading Bot
 # you can unhash it if you have numba installed and imported and the bot should work a little faster, if you use njit
