@@ -23,10 +23,10 @@ from utils import Rule, TradePair
 import requests
 from datetime import datetime
 from nlp import SentimentAnalysis
-
+import os
 import praw
 from random import shuffle
-
+import pickle
 # temporary
 
 
@@ -216,7 +216,7 @@ def get_form_features(request):
         file = fss.save(upload.name, upload)
         file_url = fss.url(file)
     result = utils.filter_features(file_url)
-    print(type(result))
+    request.session['filtered_features'] = result.tolist()
     context = {
         'filtered_features': result,
     }
@@ -226,6 +226,9 @@ def get_form_features(request):
 @csrf_protect
 def run_backtrader(request):
     rules = []
+    with open('rulesfile', 'rb') as fp:
+        if os.path.getsize('rulesfile') > 0:
+            rules = pickle.load(fp)
     if(request.POST):
         data = request.POST.dict()
         ticker1 = data.get("compare_from_feature")
@@ -240,7 +243,11 @@ def run_backtrader(request):
                     constant2, lag, relation, kind)
         rules.append(rule)
 
+    with open('rulesfile', 'wb') as fp:
+        pickle.dump(rules, fp)
+    filtered_features = request.session.get('filtered_features')
     context = {
+        'filtered_features': filtered_features,
         'rules': rules,
     }
     return render(request, 'home/backtrader.html', context)
