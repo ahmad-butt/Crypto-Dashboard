@@ -104,10 +104,16 @@
                         </div>
                         <br>
                         <div class="input-group-append">
-                          <button id="run" type="submit" class="btn btn-secondary">Run Backtest</button>
+                          <button id="run" type="submit" class="btn btn-secondary">Add Rule</button>
                         </div>
                       </div>
                     </div>
+                  </div>
+                </form>
+                <form method='post' action='backtest_from_rules'>
+                  {% csrf_token %}
+                  <div class="input-group-append">
+                    <button id="run" type="submit" class="btn btn-secondary">Run Backtest</button>
                   </div>
                 </form>
               </div>
