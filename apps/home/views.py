@@ -311,6 +311,16 @@ def pair_backtest(request, ticker1, ticker2):
     return render(request, 'home/backtest_results.html', context)
 
 
+@csrf_protect
+def backtest_from_rules(request):
+    rules = []
+    if(request.POST):
+        with open('rulesfile', 'rb') as fp:
+            if os.path.getsize('rulesfile') > 0:
+                rules = pickle.load(fp)
+                print(rules)
+
+
 @login_required(login_url="/login/")
 def pages(request):
     user_pref = CurrencyPreference.objects.get(pk=request.user.id)
